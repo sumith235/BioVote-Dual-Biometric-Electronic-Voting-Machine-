@@ -1,0 +1,103 @@
+import cv2 
+import numpy as np 
+import time 
+ 
+# ------------------------------ 
+# DATABASE (Dummy for project) 
+# ------------------------------ 
+voter_database = { 
+    "101": {"name": "Voter1", "voted": False}, 
+    "102": {"name": "Voter2", "voted": False} 
+} 
+ 
+FINGERPRINT MODULE (SIMULATED) 
+def fingerprint_auth(): 
+    print("Place finger on sensor...") 
+    time.sleep(2) 
+ 
+    # Simulated fingerprint ID input 
+    voter_id = input("Enter Fingerprint ID: ") 
+ 
+    if voter_id in voter_database: 
+        print("Fingerprint Matched") 
+        return voter_id 
+    else: 
+        print("Fingerprint Not Matched") 
+        return None 
+ 
+IRIS RECOGNITION MODULE 
+69  
+def iris_auth(): 
+    print("Looking for Iris...") 
+     
+    cam = cv2.VideoCapture(0) 
+    ret, frame = cam.read() 
+     
+    if ret: 
+        print("Iris Captured") 
+        cam.release() 
+        cv2.destroyAllWindows() 
+        return True 
+    else: 
+        print("Iris Capture Failed") 
+        cam.release() 
+        return False 
+ 
+ CHECK VOTING STATUS 
+def check_voter(voter_id): 
+    if voter_database[voter_id]["voted"]: 
+        print("Already Voted!") 
+        return False 
+    return True 
+ 
+ 
+ VOTING SYSTEM 
+def voting_process(voter_id): 
+    print("\nCandidates:") 
+    print("1. Candidate A") 
+    print("2. Candidate B") 
+    print("3. Candidate C") 
+70  
+ 
+    choice = input("Enter your choice (1/2/3): ") 
+ 
+    if choice in ["1", "2", "3"]: 
+        print("Vote Cast Successfully!") 
+        voter_database[voter_id]["voted"] = True 
+    else: 
+        print("Invalid Choice") 
+ 
+MAIN SYSTEM FLOW 
+def main(): 
+    print("===== BIOMETRIC EVM SYSTEM =====") 
+ 
+    while True: 
+        print("\nNew Voter") 
+ 
+        # Step 1: Fingerprint Authentication 
+        voter_id = fingerprint_auth() 
+        if not voter_id: 
+            continue 
+ 
+        # Step 2: Iris Authentication 
+        if not iris_auth(): 
+            continue 
+ 
+        # Step 3: Check if already voted 
+        if not check_voter(voter_id): 
+            continue 
+ 
+        # Step 4: Voting  
+        voting_process(voter_id) 
+ 
+        # Step 5: Continue or Exit 
+        cont = input("\nNext voter? (y/n): ") 
+        if cont.lower() != 'y': 
+            break 
+ 
+    print("\nSystem Closed") 
+ 
+ 
+ RUN PROGRAM 
+if __name__ == "__main__": 
+    main()
